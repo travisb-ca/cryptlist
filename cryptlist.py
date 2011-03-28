@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 # This is a small script which handles simple encrypted mailing lists. It is meant to be run from
-# a regular user account. Perhaps by filtering mailing list traffic via procmail or straigth from
+# a regular user account. Perhaps by filtering mailing list traffic via procmail or straight from
 # a dedicated account usind fetchmail.
 
 import fileinput
@@ -27,8 +27,10 @@ class list:
 	                    "list maintainer (list-admin@example.org) about your public\n"\
 			    "key to join in the fun."
 	# Don't send encryted warning messages to those who don't have an key in the list keyring
+	# True will cause anybody without a public key in the keyring to receive the above message
+	# instead of the reencrypted original.
 	send_on_encrypt_failure = False
-	admin = "list-admin@examle.org"
+	admin = "list-admin@example.org"
 	bounce_message = "Message rejected. Only members of the list may post to the list.\n"\
 			 "Original message below.\n\n----------\n\n"
 
