@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright Travis Brown travisb@travisbrown.ca $Date$ $Rev$
 # Add the given public key to the list keylist such that it can receive encrypted messages.
 # Must be run from the directory with the list keyring in it.
 

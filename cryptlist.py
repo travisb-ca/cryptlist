@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# Copyright Travis Brown travisb@travisbrown.ca $Date$ $Rev$
 
 # This is a small script which handles simple encrypted mailing lists. It is meant to be run from
 # a regular user account. Perhaps by filtering mailing list traffic via procmail or straight from
