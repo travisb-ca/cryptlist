@@ -1,0 +1,71 @@
+Introduction
+----------------------------------------
+
+Cryptlist is a simple mailing list script intended to be run via something such
+as procmail. It's goal is to create an optionally encrypted mailing list easily
+using any available computer and email address. Encryption is optional in that
+messages which are not encrypted will be distributed to the membership in the
+clear, while messages encrypted to the list key will be re-encrypted to each
+member separately.
+
+Requirements
+----------------------------------------
+
+    * A Unix-like operating system such as Mac OSX, Linux, FreeBSD, OpenBSD, etc
+    * A recent version of gpg, not gpg2
+    * A recent version of Python 2.x
+    * An outgoing smtp mail server
+    * A valid incoming email address. This can be delivered directly to a user
+      account or it could be an ISP supplied POP3 or IMAP mailbox. All you
+      require is some way to have the mail passed through cryptlist as a filter,
+      such as you can do if you process the email with procmail. 
+
+Security and Limitations
+----------------------------------------
+
+Cryptlist provides a moderate level of security. However, in the interest of
+ease of use the encrypted mailing list setup is not maximally secure.
+Specifically:
+
+    * Cryptlist trusts all the keys on the list keyring
+    * Every member receives a separately encrypted copy of the message, leaving
+      open the possibility of weaknesses related to one cleartext being
+      encrypted with multiple keys
+    * Messages which are signed and encrypted when sent to the list will be
+      re-encrypted to each member. The original signature will be lost.
+    * The list could, but does not sign the re-encrypted message because it is
+      not clear that it would provide additional security. 
+
+Installation
+----------------------------------------
+
+   1. Edit cryptlist.py. The list settings are all at the top of the file.
+   2. Create the list keyring in the gpg directory 'gpg --homedir . --gen-key'.
+      It is recommended that you note that this key is for a mailing list in
+      the key comment. Note the key fingerprint since you will need that in a
+      following step. Enter an empty passphrase for this key.
+   3. Export the list public key
+      'gpg --homedir . --export --output list_key.key list@example.org'
+   4. Sign the key with your regular key so other may know that they are
+      getting the correct key
+      'gpg --import list_key.key; gpg --sign-key list@example.com'. Ensure that
+      the fingerprints match at this step.
+   5. Import the signature back into the list keyring
+      'gpg --export --armour --output list_key.asc list@example.com' and then
+      'gpg --homedir . --import list_key.asc'. Keep list_key.asc around as that
+      is the keyfile you will want to distribute (if you aren't putting the key
+      on a keyserver).
+   6. For each member of the list for which you have a public key you must add
+      the key to the list keyring. As the list will trust every key on its
+      keyring you should not configure gpg for the list to automatically
+      retrieve keys from a keyserver. You import keys using the add_keys.sh
+      script.
+   7. Finally add the cryptlist script to the mail filtering system. See the
+      next section. Once this step is completed you should be able to send some
+      test messages successfully. 
+
+Setting up as a filter
+----------------------------------------
+
+If you are using a POP3 or IMAP mailbox with fetchmail then you can easily set
+Cryptlist to be the script called on reception of any email.
